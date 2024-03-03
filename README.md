@@ -12,7 +12,7 @@ A basic data privacy vault written in Go. Uses redis behind the scenes to store 
 
 POST ```/tokenize```
 
-Sample payload
+Sample request payload
 ```
 {
 	"id": "req-12345",
@@ -24,6 +24,18 @@ Sample payload
 }
 ```
 
+Sample Respose payload
+```
+{
+  "id": "req-12345",
+  "data": {
+    "field1": "token1",
+    "field2": "token2",
+    "fieldn": "tokenn"
+  }
+}
+```
+
 * **Detokenize**
 
 POST ```/detokenize```
@@ -32,8 +44,8 @@ Sample payload
 
 ```
 {
-  "Id": "req-12345",
-  "Data": {
+  "id": "req-12345",
+  "data": {
     "field1": "token1",
     "field2": "token2",
     "fieldn": "tokenn"
@@ -41,5 +53,21 @@ Sample payload
 }
 ```
 
+```
+{
+    "field1": {
+        "found": true,
+        "value": "value1"
+    },
+    "field2": {
+        "found": true,
+        "value": "value2"
+    },
+    "fieldn": {
+        "found": true,
+        "value": "valuen"
+    }
+}
+```
 
 Both the endpoints require operation specific API keys. 
