@@ -1,13 +1,13 @@
 package model
 
 type Request struct {
-	Id   string
-	Data map[string]string
+	Id   string            `json:"id,omitempty"`
+	Data map[string]string `json:"data,omitempty"`
 }
 
 type TokenizeResponse struct {
-	Id   string
-	Data map[string]string
+	Id   string            `json:"id,omitempty"`
+	Data map[string]string `json:"data,omitempty"`
 }
 
 type TokenizedValue struct {
@@ -17,11 +17,11 @@ type TokenizedValue struct {
 }
 
 type DetokenizedResponse struct {
-	Id   string
-	Data map[string]DetokenizedValue
+	Id   string                      `json:"id,omitempty"`
+	Data map[string]DetokenizedValue `json:"data,omitempty"`
 }
 
 type DetokenizedValue struct {
-	Found bool
-	Value string
+	Found bool   `json:"found,omitempty"`
+	Value string `json:"value,omitempty"`
 }
