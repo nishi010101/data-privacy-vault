@@ -42,4 +42,4 @@ Sample payload
 ```
 
 
-Both the endpoints requires operation specific API keys. 
+Both the endpoints require operation specific API keys. 
