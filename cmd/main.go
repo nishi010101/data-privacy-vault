@@ -83,7 +83,11 @@ func detokenizedHandler(config config.Config) http.HandlerFunc {
 			http.Error(writer, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		err = json.NewEncoder(writer).Encode(detokenizedData)
+		response := model.DetokenizedResponse{
+			Id:   data.Id,
+			Data: *detokenizedData,
+		}
+		err = json.NewEncoder(writer).Encode(response)
 		if err != nil {
 			http.Error(writer, err.Error(), http.StatusInternalServerError)
 			return

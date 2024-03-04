@@ -2,24 +2,15 @@ package core
 
 import (
 	"context"
-	"crypto/aes"
-	"crypto/cipher"
 	"encoding/json"
 	"vault/internal/config"
+	"vault/internal/encryption"
 	"vault/internal/model"
 )
 
 func Detokenize(context context.Context, values map[string]string, config config.Config) (*map[string]model.DetokenizedValue, error) {
 	detokenizedValues := make(map[string]model.DetokenizedValue)
-	block, err := aes.NewCipher([]byte(config.EncryptionKey))
-	if err != nil {
-		panic(err.Error())
-	}
 
-	aesgcm, err := cipher.NewGCM(block)
-	if err != nil {
-		panic(err.Error())
-	}
 	for key, token := range values {
 		value, err := config.RedisClient.Get(context, key).Result()
 		if err != nil {
@@ -32,15 +23,15 @@ func Detokenize(context context.Context, values map[string]string, config config
 			return nil, err
 		}
 
-		plaintext, err := aesgcm.Open(nil, persistedValue.Nonce, persistedValue.CipherTextValue, nil)
+		plaintext, err := encryption.Decrypt(persistedValue.CipherTextValue, persistedValue.Nonce, config.EncryptionKey)
 		if err != nil {
-			panic(err.Error())
+			return nil, err
 		}
 
 		if persistedValue.Token == token {
 			detokenizedValues[key] = model.DetokenizedValue{
 				Found: true,
-				Value: string(plaintext),
+				Value: plaintext,
 			}
 		} else {
 			detokenizedValues[key] = model.DetokenizedValue{
